@@ -1,0 +1,293 @@
+{% extends "base.html" %}
+
+{% block main %}
+<!--页面主要内容-->
+<style>
+    .lyear-layout-content .container-fluid {
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
+    .container-fluid {
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .first {
+        background: white;
+        margin: 10px, 10px;
+    }
+
+    .block1 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+
+    .block1 img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+
+    }
+
+    .block1 h4 {
+        color: #3e3a3a;
+        margin-right: auto;
+        padding-left: 50px;
+        padding-top: 20px;
+        font-weight: bold;
+    }
+
+    .block1 p {
+        margin: 20px;
+        font-size: larger;
+        text-align: center;
+        padding: auto;
+
+    }
+
+    .green-box {
+        border: 2px solid rgb(130, 223, 130);
+        border-radius: 10px;
+        padding: 5px 20px;
+        width: 120px;
+        text-align: center;
+        margin-left: 100px;
+        margin-right: 50px;
+        color: rgb(130, 223, 130);
+        cursor: pointer;
+    }
+
+    .line {
+        height: 2px;
+        width: 95%;
+        margin: 5px auto;
+        background-color: #6d6565;
+    }
+
+    .block2 {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .box {
+        width: calc(16.666% - 10px);
+        /* 计算每个小盒子的宽度，减去5px作为竖线的宽度 */
+        height: 50px;
+        background-color: white;
+        padding: auto;
+        text-align: center;
+    }
+
+    .box:not(:last-child) {
+        border-right: 3px solid #ccc;
+        /* 设置竖线 */
+    }
+
+    .box-content {
+        margin-bottom: 5px;
+        /* 设置两行文字之间的间距 */
+    }
+
+    .block3 {
+        display: flex;
+        justify-content: space-between;
+        /* 水平分布 */
+        align-items: center;
+        /* 垂直居中对齐 */
+        align-items: center;
+    }
+
+    .box1 {
+        width: 400px;
+        padding: 20px;
+        height: 400px;
+        margin-top: 10px;
+        background-color: #FFFFFF;
+    }
+
+    .box2 {
+        width: 400px;
+        padding: 20px;
+        margin-left: 20px;
+        margin-top: 10px;
+        height: 400px;
+        background-color: #FFFFFF;
+    }
+
+    .box3 {
+        width: 400px;
+        padding: 20px;
+        margin-left: 20px;
+        margin-top: 10px;
+        height: 400px;
+        background-color: #FFFFFF;
+    }
+
+    h3 {
+        padding-left: 30px;
+    }
+
+    p {
+        padding-left: 32px;
+        font-size: large;
+    }
+
+    h1 {
+        padding-left: 30px;
+    }
+
+    .spaced-text {
+        margin-right: 150px;
+        /* 右侧间距 */
+    }
+</style>
+<main class="lyear-layout-content">
+    <div class="container-fluid">
+        <div class="first">
+            <div class="block1">
+                <h4>预测日负荷信息</h4>
+                <img src="..\static\images\3.png" alt="日期">
+                <p>2024/04/21</p>
+                <bottun class="green-box">
+                    导出
+                </bottun>
+            </div>
+            <div class="line"></div>
+            <div class="block2">
+                <div class="box">
+                    <div class="box-content">最大值</div>
+                    <div class="box-content">0.329kw</div>
+                </div>
+                <div class="box">
+                    <div class="box-content">最小值</div>
+                    <div class="box-content">0.329kw</div>
+                </div>
+                <div class="box">
+                    <div class="box-content">谷峰差</div>
+                    <div class="box-content">553kw</div>
+                </div>
+                <div class="box">
+                    <div class="box-content">平均负荷</div>
+                    <div class="box-content">0.329kw</div>
+                </div>
+                <div class="box">
+                    <div class="box-content">负荷系数</div>
+                    <div class="box-content">85.5%</div>
+                </div>
+                <div class="box">
+                    <div class="box-content">平均负荷率</div>
+                    <div class="box-content">63.2%</div>
+                </div>
+            </div>
+            <div id="myGraph" style="width: 100%;height: 330px;"></div>
+        </div>
+        <div class="block3">
+            <div class="box1">
+                <h3>日负荷分析</h3>
+                <div class="line"></div>
+                <p>总负荷</p>
+                <h1>12445KW</h1>
+                <img src="..\static\images\4.png">
+            </div>
+            <div class="box2">
+
+                <h3>最高负荷时段分析</h3>
+                <div class="line"></div>
+                <!--<p>近七天最高负荷时段变化</p>-->
+                <div id="picture" style="width: 400px;height: 200px;"></div>
+                <img src="..\static\images\5.png">
+            </div>
+            <div class="box3">
+
+                <h3>预测日风险</h3>
+                <div class="line"></div>
+                <img src="..\static\images\6.png">
+            </div>
+        </div>
+
+    </div>
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+    <script>
+        var graph = echarts.init(document.getElementById('myGraph'));
+        option = {
+            title: {
+                text: '       预测结果曲线'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['true', 'predict']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['0:00', '2:00', '4:00', '6:00', '8:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00', '24:00'] // 修改横坐标为24小时制
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name: 'true',
+                    type: 'line',
+                    data: [120, 132, 101, 134, 150, 180, 190, 120, 132, 141, 134, 110, 200, 210]
+                },
+                {
+                    name: 'predict',
+                    type: 'line',
+                    data: [320, 332, 301, 334, 390, 330, 320, 340, 351, 344, 334, 380, 356, 320]
+                }
+            ]
+        };
+
+        graph.setOption(option);    
+    </script>
+    <script>
+        var graph1 = echarts.init(document.getElementById('picture'));
+        option = {
+            title: {
+                text: '近七天最高负荷时段变化', // 左上角显示的文本
+                left: 'center', // 文本居中显示
+                top: 'top' // 文本距离顶部的距离
+            },
+            xAxis: {
+                type: 'category',
+                data: ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'] // 使用24小时制的时间
+            },
+            yAxis: {
+                type: 'value',
+                max: 2500 // 设置纵坐标最高值
+            },
+            series: [
+                {
+                    data: [1100, 2000, 1500, 800, 2342, 1100, 1300, 1100, 2000, 1500, 800, 2342, 1100, 1300, 1100, 2000, 1500, 800, 2342, 1100, 1300, 2000, 1500, 800],
+                    type: 'bar',
+                    showBackground: true,
+                    backgroundStyle: {
+                        color: 'rgba(180, 180, 180, 0.2)'
+                    }
+                }
+            ]
+        };
+
+        graph1.setOption(option);    
+    </script>
+    <!--End 页面主要内容-->
+    {% endblock %}

@@ -1,0 +1,497 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<style>
+    .main{
+        width: 1500px;
+        height: 800px;
+        /* background: green; */
+        /* background: url(../images/bg.jpg) no-repeat top center; */
+        /* "{{ url_for('static', filename='images/img-slide-1.jpg') }}" */
+        /* background: url("{{ url_for('static', filename='images/login-bg-2.jpg') }}") no-repeat top center; */
+        /* background-color: #fff; */
+        background: transparent;
+        /* 这个是变成flex容器 */
+        display: flex;
+        flex-direction: column;
+        /* 这是水平居中 */
+        justify-content: center;
+        /* 垂直居中 */
+        /* align-items: center; */
+
+        
+    }
+    .main div{
+        /* background: transparent; */
+        /* border: 3px solid #dfdcdc; */
+
+        /* 边界透明 */
+        /* 这个会影响到后面的属性 */
+        border: 20px solid transparent;
+        
+        /* 如果不固定大小，默认分全部，分的部分属性如上 */
+    }
+    .flex1{
+
+        /* text-align: center; */
+
+        flex: 1;
+        height: 350px;
+        /* width: 180px; */
+        justify-content: center;
+        align-items: center;
+        background-color: #fff;
+        margin-right: 40px;
+        border: 20px;
+        /* padding-left: 30px;
+        padding-right: 30px;
+        padding-top: 30px;
+        padding-bottom: 30px; */
+    }
+    .flex2{
+        /* flex: 2; */
+        /* height: 300px;
+        width: 300px; */
+
+        flex:1;
+        /* 这个是变成flex容器 */
+        display: flex;
+        /* 变成行排列 */
+        flex-direction: row;
+        justify-content: center; 
+        align-items: center; 
+        /* 这么写没用 */
+        /* border-top-width: 0px;
+        border-bottom-width: 0px; */
+    }
+    .flex3{
+        height: 350px;
+        margin-right: 40px;
+        flex:2;
+        background-color: #fff;
+    }
+
+
+    .image-container1 {
+    /* position: relative;  可选，根据需要设置定位  */
+    width: 320px; /* 根据需要设定宽度 */
+    height: 300px; /* 根据需要设定高度 */
+    overflow: hidden; /* 防止图片溢出容器 */
+    /* background-color: #fff; */
+    border: none;
+
+    }
+    .image-container2 {
+    /* width: 850px; 根据需要设定宽度 */
+    /* height: 350px; 根据需要设定高度 */
+    /* overflow: hidden; 防止图片溢出容器 */
+    /* background-color: #fff; */
+    /* border: none; */
+    
+    }
+    .image-container3 {
+
+    /* position: relative;  可选，根据需要设置定位  */
+    width: 850px; /* 根据需要设定宽度 */
+    height: 300px; /* 根据需要设定高度 */
+    overflow: hidden; /* 防止图片溢出容器 */
+    /* background-color: #fff; */
+    border: none;
+    
+    }
+    .image-container4 {
+    /* position: relative;  可选，根据需要设置定位  */
+    width: 400px; /* 根据需要设定宽度 */
+    height: 300px; /* 根据需要设定高度 */
+    overflow: hidden; /* 防止图片溢出容器 */
+    /* background-color: #fff; */
+    border: none;
+
+    }
+    .left {
+        width: 460px; 
+        height: 260px; 
+        float: left;
+        margin: 5px;
+        /* background: #8e8c8c; */
+    }
+    .right {
+        width: 360px; 
+        height: 260px; 
+        float: left;
+        margin: 5px;
+        /* background: #8e8c8c; */
+    }
+    .vertical-line {
+        float: left;
+
+        
+        width: 2px; /* 线的宽度 */
+        height: 260px; /* 线的高度 */
+        background-color: #c5bfbf; /* 线的颜色 */
+        margin: 0; /* 清除外边距 */
+        padding: 0 ; /* 清除内边距 */
+        border: none !important;
+        margin: 20px 10px 0px 0px;
+        /* border: 1px solid black; */
+    }
+
+    
+</style>
+<style>
+    #scrolling-text {
+      width: 400px;
+      height: 200px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid #f9f6f6;
+    }
+    #scrolling-text p {
+      position: absolute;
+      width: 100%;
+      margin: 0;
+    }
+    
+</style>
+<style>
+#containerj {
+    border: none; /* 去除边框 */
+    padding: 0; /* 去除内填充 */
+    width: 100%;
+    background-color: #ddd;
+    border-top-width: 0px;
+    border-left-width: 0px;
+    border-bottom-width: 0px;
+    border-right-width: 0px;
+    padding-left: 0px;
+    padding-right:0px;
+}
+ 
+.skills {
+    border: none; /* 去除边框 */
+    padding: 0; /* 去除内填充 */
+  text-align: right;
+  padding-right: 20px;
+  line-height: 40px;
+  color: white;
+}
+.html {
+    
+    height: 10px;
+    border: none; /* 去除边框 */
+    padding: 0; /* 去除内填充 */
+    background-color: rgb(92, 167, 92);
+    width: 23.5%; 
+    background-image: linear-gradient(to right, #4CAF50, rgba(76, 175, 80, 0));}
+</style>
+
+<main class="lyear-layout-content">
+      
+  <div class="container-fluid">
+    <div class="main">
+        <div class="flex2" style="border-bottom-width: 0px;border-top-width: 0px;">
+            <div class="flex1">
+                <!-- <div>拓扑图</div> -->
+                <h3>拓扑图</h3>
+                <hr style="width: 100%; margin: 0 auto; border: 1px solid #c5bfbf;">
+
+                
+                <div class="image-container1">
+                   
+                    <!-- {{ url_for('static', filename='images/img-slide-1.jpg') }} -->
+                    <img src="{{ url_for('static', filename='images/tuoputu.png') }}" alt="替代文本描述">
+                  </div>
+                
+            </div>
+
+            <div class="flex3">
+                <!-- <div class="image-container2"> -->
+                    <h3>今日信息小结</h3>
+                    <hr style="width: 100%; margin: 0 auto; border: 1px solid #c5bfbf;">
+                    <div class="left">
+                        <div style="border: 0px;">
+                        <h4>今日统计:</h4>
+
+                        <div id="scrolling-text">
+                            <p>一、系统总体运行状况<br>
+                                <br>
+                                全网负荷水平<br>
+                                今日最高负荷：3250 MW<br>
+                                今日最低负荷：2960 MW<br>
+                                平均负荷：31.png MW<br>
+                                负荷峰谷差：290 MW<br>
+                                二、关键设备状态监控<br>
+                                <br>
+                                变压器运行状态<br>
+                                <br>
+                                在线运行变压器总数：250台<br>
+                                正常运行变压器占比：99.6%<br>
+                                超温预警变压器：1台（已及时处理）<br>
+                                断路器动作情况<br>
+                                <br>
+                                今日断路器总动作次数：12次<br>
+                                计划性操作次数：6次<br>
+                                保护动作次数：6次<br>
+                                三、电网稳定性指标<br>
+                                <br>
+                                电压质量<br>
+                                
+                                全网平均电压：1.005 pu<br>
+                                电压合格率：99.85%<br>
+                                低电压事件：0起<br>
+                                频率波动<br>
+                                
+                                今日最大频率偏差：+/-0.01 Hz<br>
+                                平均频率：50.00 Hz<br>
+                                频率合格率：100%<br>
+                                四、异常事件与应对<br>
+                                <br>
+                                故障报警与处理<br>
+                                <br>
+                                今日故障报警总数：2次<br>
+                                线路瞬时接地故障：1次（已自动复归）<br>
+                                局部谐振报警：1次（通过调整无功补偿装置消除）<br>
+                                调度指令执行<br>
+                                <br>
+                                今日接收调度指令：10条<br>
+                                指令执行成功率：100%<br>
+                                五、数据分析与预测<br>
+                                <br>
+                                负荷预测<br>
+                                明日预计最高负荷：3200 MW<br>
+                                明日预计最低负荷：3050 MW</p>
+                        </div>
+                        <script>
+                            function scrollText() {
+                              var scrollingText = document.getElementById('scrolling-text');
+                              var text = scrollingText.getElementsByTagName('p')[0];
+                          
+                              // 每次滚动1像素
+                              var scrollAmount = 1;
+                          
+                              // 设置定时器，每30毫秒滚动一次
+                              var scrollInterval = setInterval(function() {
+                                if (text.offsetTop < -(text.offsetHeight)) {
+                                  // 当文本滚动出视图时，将其重新定位到顶部
+                                  text.style.top = scrollingText.offsetHeight + 'px';
+                                } else {
+                                  // 向上滚动文本
+                                  text.style.top = (text.offsetTop - scrollAmount) + 'px';
+                                }
+                              }, 30);
+                            }
+                          
+                            // 页面加载完成后开始滚动文本
+                            window.onload = scrollText;
+                          </script>
+
+
+                        </div>
+                    </div>
+
+                    <div class="vertical-line"></div>
+
+                    <div class="right">
+                        <div style="border: 0px;">
+                            <h4>今日风险</h4>
+                        </div>
+                        <h2>23.5%</h2>
+                        <!-- <img src="{{ url_for('static', filename='images/jindutiao.png') }}" alt="替代文本描述"> -->
+                        <span>进度：</span>
+                        <div id="containerj">
+                            <div class="skills html"></div>
+                          </div>
+                          <div style="float:left;margin-right: 80px;">
+                            <h5>同比近7天</h5>
+                            <h5>同比近3天</h5>
+                            
+                          </div>
+                          <div>
+                            <h5 style="color: red;">平均值 2</h5>
+                            <h5 style="color: green;">5.91%</h5>
+                            
+                            
+                            
+                          </div>
+                    </div>
+
+                <!-- </div> -->
+                    
+
+            </div>
+        </div>
+        <div class="flex2">
+            <div class="flex3">
+                
+                <h3>今日负荷与预测负荷对比</h3>
+                <hr style="width: 100%; margin: 0 auto; border: 1px solid #c5bfbf;">
+                <div class="image-container3">
+                    
+                </div>
+                <script src="{{ url_for('static', filename='js/echarts.min.js') }}"></script>
+                    <script>
+                    // 初始化实例对象  echarts.init(dom容器);
+                    var myChart = echarts.init(document.querySelector(".image-container3"));
+                    // 指定配置项和数据
+                    var option = {
+                        title: {
+                            text: '近6个月情况：'
+                        },
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        legend: {},
+                        toolbox: {
+                            show: true,
+                            feature: {
+                            dataZoom: {
+                                yAxisIndex: 'none'
+                            },
+                            dataView: { readOnly: false },
+                            magicType: { type: ['line', 'bar'] },
+                            restore: {},
+                            saveAsImage: {}
+                            }
+                        },
+                        xAxis: {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: ['十月', '十一月', '十二月', '一月', '二月', '三月', '四月']
+                        },
+                        yAxis: {
+                            type: 'value',
+                            axisLabel: {
+                            formatter: '{value} 000千瓦'
+                            }
+                        },
+                        series: [
+                            {
+                            name: '预测',
+                            type: 'line',
+                            data: [10, 11, 9, 6, 7, 12, 9],
+                            markPoint: {
+                                data: [
+                                { type: 'max', name: 'Max' },
+                                { type: 'min', name: 'Min' }
+                                ]
+                            },
+                            markLine: {
+                                data: [{ type: 'average', name: 'Avg' }]
+                            }
+                            },
+                            {
+                            name: '实际',
+                            type: 'line',
+                            data: [7, 10, 13, 7, 8, 10, 9],
+                            markPoint: {
+                                data: [{ name: '周最低', value: -2, xAxis: 1, yAxis: -1.5 }]
+                            },
+                            markLine: {
+                                data: [
+                                { type: 'average', name: 'Avg' },
+                                [
+                                    {
+                                    symbol: 'none',
+                                    x: '90%',
+                                    yAxis: 'max'
+                                    },
+                                    {
+                                    symbol: 'circle',
+                                    label: {
+                                        position: 'start',
+                                        formatter: 'Max'
+                                    },
+                                    type: 'max',
+                                    name: '最高点'
+                                    }
+                                ]
+                                ]
+                            }
+                            }
+                        ]
+                        };
+                    // 把配置项给实例对象
+                    myChart.setOption(option);
+                    </script>
+
+            </div>
+
+            <div class="flex1">
+            
+                <h3 style="float:left;margin-right: 160px;">平均负荷</h3>
+                <h5>2023/01-2023/12</h5>
+
+                <hr style="width: 100%; margin: 0 auto; border: 1px solid #c5bfbf;">
+                <div class="image-container4">  
+                    <script src="js/echarts.min.js"></script>
+                    <script>
+                    // 初始化实例对象  echarts.init(dom容器);
+                    var myChart = echarts.init(document.querySelector(".image-container4"));
+                    // 指定配置项和数据
+                    var option = {
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                            type: 'shadow'
+                            }
+                        },
+                        // legend: {},
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        xAxis: [
+                            {
+                            type: 'category',
+                            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月','8月','9月','10月','11月','12月']
+                            }
+                        ],
+                        yAxis: [
+                            {
+                            type: 'value',
+                            axisLabel: {
+                                formatter: '{value} 负荷'
+                                }
+                            }
+                        ],
+                        series: [
+                            {
+                            name: 'Direct',
+                            type: 'bar',
+                            emphasis: {
+                                focus: 'series'
+                            },
+                            data: [320, 342, 301, 364, 370, 392, 330,450,260,399,479,250]
+                            },
+                            
+
+                        ]
+                        };
+                    // 把配置项给实例对象
+                    myChart.setOption(option);
+                    </script>
+                    
+
+
+
+                    <!-- <img src="{{ url_for('static', filename='images/zantaifenxi.png') }}" alt="替代文本描述"> -->
+                  </div>
+            </div>
+        </div>
+        
+        <!-- <div class="flex1">1</div> -->
+
+    </div>
+    
+  </div>
+  
+</main>
+<!--End 页面主要内容-->
+<!-- {{ url_for('static', filename='js/main.min.js') }} -->
+
+    
+  
+{% endblock %}

@@ -1,0 +1,541 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+{#<style>#}
+{##}
+{#    .container {#}
+{#        display: flex;#}
+{#        width: 1500px;#}
+{#        height: 800px;#}
+{#     }#}
+{##}
+{#    .left {#}
+{#        width: 400px;#}
+{#        height: 500px;#}
+{#        margin-left: 400px;#}
+{#        margin-top: 120px;#}
+{#        /* 设置虚化效果 */#}
+{#        background-color: white#}
+{#     }#}
+{##}
+{#    .right {#}
+{#        width: 400px;#}
+{#        height: 500px;#}
+{#        margin-left: 100px;#}
+{#        margin-top: 120px;#}
+{#        /* 设置虚化效果 */#}
+{#        background-color: white#}
+{#     }#}
+{##}
+{#    .first {#}
+{#        display: flex;#}
+{#        align-items: center;#}
+{#    }#}
+{##}
+{#    img {#}
+{#        max-width: 50px;#}
+{#        /* 图片的最大宽度 */#}
+{#        /*height: auto;#}
+{#        /* 图片高度自适应 */#}
+{#    }#}
+{##}
+{#    h2 {#}
+{#        margin-left: 10px;#}
+{#        /* 调整图片和标题之间的间距 */#}
+{#        color: gray;#}
+{#    }#}
+{##}
+{#    .line {#}
+{#        height: 2px;#}
+{#        width: 95%;#}
+{#        margin: 5px auto;#}
+{#        background-color: #000;#}
+{#    }#}
+{##}
+{#    .word {#}
+{#        color: #bab6b6;#}
+{#        line-height: 0.5;#}
+{#        /* 设置行高 */#}
+{#        padding-left: 40px;#}
+{#    }#}
+{##}
+{#    .word p {#}
+{#        margin: 10px 0;#}
+{#        /* 设置段落之间的上下间距 */#}
+{#    }#}
+{##}
+{#    .input {#}
+{#        width: 350px;#}
+{#        height: 120px;#}
+{#        border: 2px dashed #ccc;#}
+{#        text-align: center;#}
+{#        cursor: pointer;#}
+{#        margin-left: 20px;#}
+{#    }#}
+{##}
+{#    input[type="file"] {#}
+{#        display: none;#}
+{#    }#}
+{##}
+{#    .image {#}
+{#        justify-content: center;#}
+{#        /* 水平居中 */#}
+{#        align-items: center;#}
+{#        /* 垂直居中 */#}
+{#        padding-top: 10px;#}
+{#    }#}
+{##}
+{#    #drop-area {#}
+{#        border: 2px dashed #ccc;#}
+{#        text-align: center;#}
+{#        font-family: Arial, sans-serif;#}
+{#        margin-left: 20px;#}
+{#        margin-top: 15px;#}
+{#        width: 350px;#}
+{#        height: 150px;#}
+{#        display: flex;#}
+{#        justify-content: center;#}
+{#        /* 水平居中 */#}
+{#        align-items: center;#}
+{#        /* 垂直居中 */#}
+{#        background-color: #ded8d8;#}
+{#    }#}
+{##}
+{#    #drop-area.highlight {#}
+{#        border-color: purple;#}
+{#    }#}
+{##}
+{#    #file-list {#}
+{#        list-style-type: none;#}
+{#        padding: 0;#}
+{#    }#}
+{##}
+{#    .uplaod-btn {#}
+{#        background-color: rgb(132, 189, 224);#}
+{#        color: white;#}
+{#        border-radius: 10px;#}
+{#        font-size: 15px;#}
+{#        border: none;#}
+{#        margin-top: 10px;#}
+{#        width: 250px;#}
+{#        height: 40px;#}
+{#        font-weight: bold;#}
+{#    }#}
+{##}
+{#    .uplaod-btn:hover {#}
+{#        background-color: rgb(105, 142, 165);#}
+{#        transition: all 0.6s;#}
+{#    }#}
+{##}
+{#    .predict {#}
+{#        position: relative;#}
+{#        width: 350px;#}
+{#        height: 100px;#}
+{#    }#}
+{##}
+{#    .begin {#}
+{#        display: inline-block;#}
+{#        background-color: green;#}
+{#        color: white;#}
+{#        padding: 10px 20px;#}
+{#        border: none;#}
+{#        border-radius: 5px;#}
+{#        cursor: pointer;#}
+{#        margin-left: 150px;#}
+{#        margin-top: 10px;#}
+{#    }#}
+{##}
+{#    #overlay {#}
+{#        position: fixed;#}
+{#        top: 0;#}
+{#        left: 0;#}
+{#        width: 100%;#}
+{#        height: 100%;#}
+{#        background-color: rgba(0, 0, 0, 0.5);#}
+{#        /* 半透明黑色背景 */#}
+{#        display: none;#}
+{#        justify-content: center;#}
+{#        align-items: center;#}
+{#        z-index: 9999;#}
+{#    }#}
+{##}
+{#    #loader {#}
+{#        width: 500px;#}
+{#        background-color: #fff;#}
+{#        padding: 20px;#}
+{#        border-radius: 5px;#}
+{#        text-align: center;#}
+{#    }#}
+{##}
+{#    #progressBar {#}
+{#        width: 100%;#}
+{#        height: 20px;#}
+{#        background-color: #f0f0f0;#}
+{#        border-radius: 10px;#}
+{#        margin-top: 10px;#}
+{#    }#}
+{##}
+{#    #progress {#}
+{#        width: 0%;#}
+{#        height: 100%;#}
+{#        background-color: #4caf50;#}
+{#        border-radius: 10px;#}
+{#    }#}
+{#</style>#}
+    
+<style>
+    .container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 80px auto;
+        max-width: 100%;
+    }
+
+    .left, .right {
+        flex-basis: calc(30vw ); /* 稍微减小基础宽度 */
+        height: calc(40vw - 20px); /* 调整高度以保持合理的比例 */
+        margin: 20px;
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .first {
+        display: flex;
+        align-items: center;
+        padding: 1vw;
+    }
+
+    img {
+        width: 4vw; /* 调整图片大小 */
+        height: auto;
+    }
+
+    h2 {
+        margin-left: 1vw;
+        color: gray;
+        font-size: 1.2vw; /* 调整字体大小 */
+    }
+
+    .line {
+        height: 2px;
+        width: 90%;
+        margin: 1vw auto;
+        background-color: #000;
+    }
+
+    .word {
+        color: #bab6b6;
+        line-height: 1.5;
+        padding: 0 1vw; /* 调整内边距 */
+        font-size: 0.9vw; /* 调整文本大小 */
+    }
+
+    .input, #drop-area {
+        width: 85%;
+        margin: 1vw auto;
+        border: 0.2vw dashed #ccc;
+        padding: 1vw;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .uplaod-btn {
+        background-color: rgb(132, 189, 224);
+        color: white;
+        border-radius: 0.5vw;
+        font-size: 1vw; /* 调整按钮字体大小 */
+        border: none;
+        padding: 0.8vw 0;
+        width: 100%;
+        cursor: pointer;
+    }
+
+    .uplaod-btn:hover {
+        background-color: rgb(105, 142, 165);
+        transition: background-color 0.3s;
+    }
+
+    .predict {
+        width: 85%;
+        margin: 1vw auto;
+        text-align: center;
+    }
+
+    .begin {
+        background-color: green;
+        color: white;
+        padding: 0.8vw 1.6vw;
+        border-radius: 0.5vw;
+        font-size: 1vw; /* 调整按钮字体大小 */
+        border: none;
+        cursor: pointer;
+    }
+
+    #overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #loader {
+        width: 40vw;
+        background-color: #fff;
+        padding: 2vw;
+        border-radius: 1vw;
+        text-align: center;
+    }
+
+    #progressBar {
+        width: 100%;
+        height: 2vw;
+        background-color: #f0f0f0;
+        border-radius: 1vw;
+    }
+
+    #progress {
+        width: 0%;
+        height: 100%;
+        background-color: #4caf50;
+        border-radius: 1vw;
+    }
+</style>
+
+<main>
+    <div class="container">
+        <div class="left">
+            <div class="first">
+                <img src="../static/images/1.png" alt="Your Image">
+                <h2>负荷预测</h2>
+            </div>
+            <div class="line"></div>
+            <div class="word">
+                <p>*文件说明</p>
+                <p>文件格式： pkl文件</p>
+                <p>文件大小： 20M以内</p>
+                <p>文件内容： 预测日前三天的天气和负荷数据</p>
+            </div>
+
+            <div class="input" id="leftinput">
+                <div class="image">
+                    <img src="../static/images/2.png" alt="input">
+                </div>
+                <input class="fileInput" type="file" id="leftfile" name="leftfile" onchange="change('left')">
+
+                <button class="uplaod-btn" onclick="document:leftfile.click()">点击此处上传文件</button>
+
+                <div class="hidden_left" id="leftInfo"></div>
+            </div>
+            <script>
+                function handleFile(files) {
+                    // 处理文件上传逻辑
+                    console.log(files);
+                }
+            </script>
+            <div id="drop-area" ondragover="event.preventDefault()" ondrop="handleDrop(event)"
+                ondragenter="this.classList.add('highlight')" ondragleave="this.classList.remove('highlight')">
+                <p>将文件拖拽到此处上传文件</p>
+            </div>
+            <div calss="predict">
+                <button class="begin" onclick="showLoader()">开始预测</button>
+            </div>
+            <div id="overlay">
+                <div id="loader">
+                    <div id="progressBar">
+                        <div id="progress"></div>
+                    </div>
+                    <div id="status">加载中...</div>
+                </div>
+            </div>
+            <ul id="file-list"></ul>
+
+            <script>
+                function handleDrop(event) {
+                    event.preventDefault();
+                    var fileList = event.dataTransfer.files;
+                    var fileListContainer = document.getElementById('file-list');
+
+                    // 清空文件列表
+                    fileListContainer.innerHTML = '';
+
+                    // 遍历上传的文件
+                    for (var i = 0; i < fileList.length; i++) {
+                        var listItem = document.createElement('li');
+                        listItem.textContent = fileList[i].name;
+                        fileListContainer.appendChild(listItem);
+                    }
+                }
+            </script>
+        </div>
+        <div class="right">
+            <div class="first">
+                <img src="../static/images/1.png" alt="Your Image">
+                <h2>暂态预测</h2>
+            </div>
+            <div class="line"></div>
+            <div class="word">
+                <p>*文件说明</p>
+                <p>文件格式： ccs文件</p>
+                <p>文件大小： 20M以内</p>
+                <p>文件内容： </p>
+            </div>
+
+            <div class="input" id="rightinput">
+                <div class="image">
+                    <img src="../static/images/2.png" alt="input">
+                </div>
+                <input class="fileInput" type="file" id="rightfile" onchange="change('right')">
+                <button class="uplaod-btn" onclick="document:rightfile.click()">点击此处上传文件</button>
+                <div class="hidden_right" id="rightInfo"></div>
+            </div>
+            <script>
+                function handleFile(files) {
+                    // 处理文件上传逻辑
+                    console.log(files);
+                }
+            </script>
+            <div id="drop-area" ondragover="event.preventDefault()" ondrop="handleDrop(event)"
+                ondragenter="this.classList.add('highlight')" ondragleave="this.classList.remove('highlight')">
+                <p>将文件拖拽到此处上传文件</p>
+            </div>
+            <div calss="predict">
+                <button class="begin" onclick="showLoader()">开始预测</button>
+            </div>
+            <div id="overlay">
+                <div id="loader">
+                    <div id="progressBar">
+                        <div id="progress"></div>
+                    </div>
+                    <div id="status">加载中...</div>
+                </div>
+            </div>
+            <ul id="file-list"></ul>
+
+            <script>
+                function handleDrop(event) {
+                    event.preventDefault();
+                    var fileList = event.dataTransfer.files;
+                    var fileListContainer = document.getElementById('file-list');
+
+                    // 清空文件列表
+                    fileListContainer.innerHTML = '';
+
+                    // 遍历上传的文件
+                    for (var i = 0; i < fileList.length; i++) {
+                        var listItem = document.createElement('li');
+                        listItem.textContent = fileList[i].name;
+                        fileListContainer.appendChild(listItem);
+                    }
+                }
+            </script>
+
+            <script>
+                function handleFile(files) {
+                    const uploadStatus = document.getElementById('uploadStatus');
+
+                    // 模拟上传过程，这里使用setTimeout来模拟异步上传
+                    setTimeout(() => {
+                        const success = Math.random() < 0.5; // 随机生成上传成功或失败
+
+                        if (success) {
+                            uploadStatus.textContent = '文件上传成功';
+                            uploadStatus.classList.remove('hidden_left');
+                            setTimeout(() => {
+                                uploadStatus.classList.add('hidden_left');
+                            }, 1000); // 1秒后隐藏提示
+                        } else {
+                            uploadStatus.textContent = '文件上传失败';
+                            uploadStatus.classList.remove('hidden_left');
+                            setTimeout(() => {
+                                uploadStatus.classList.add('hidden_left');
+                            }, 1000); // 1秒后隐藏提示
+                        }
+                    }, 1000); // 模拟上传过程持续1秒
+                }
+            </script>
+            <script>
+                function handleFile(files) {
+                    const uploadStatus = document.getElementById('uploadStatus');
+
+                    // 模拟上传过程，这里使用setTimeout来模拟异步上传
+                    setTimeout(() => {
+                        const success = Math.random() < 0.5; // 随机生成上传成功或失败
+
+                        if (success) {
+                            uploadStatus.textContent = '文件上传成功';
+                            uploadStatus.classList.remove('hidden_right');
+                            setTimeout(() => {
+                                uploadStatus.classList.add('hidden_right');
+                            }, 1000); // 1秒后隐藏提示
+                        } else {
+                            uploadStatus.textContent = '文件上传失败';
+                            uploadStatus.classList.remove('hidden_right');
+                            setTimeout(() => {
+                                uploadStatus.classList.add('hidden_right');
+                            }, 1000); // 1秒后隐藏提示
+                        }
+                    }, 1000); // 模拟上传过程持续1秒
+                }
+            </script>
+            <script>
+                function showLoader() {
+                    var overlay = document.getElementById('overlay');
+                    overlay.style.display = 'flex';
+
+                    var progress = 0;
+                    var progressBar = document.getElementById('progress');
+                    var status = document.getElementById('status');
+
+                    var interval = setInterval(function () {
+                        if (progress < 15) {
+                            status.innerHTML = '正在加载运行环境   ' + Math.round(progress) + '%';
+                        } else if (progress < 25) {
+                            status.innerHTML = '模型开始预测    ' + Math.round(progress) + '%';
+                        } else if (progress < 50) {
+                            status.innerHTML = '正在生成Sot曲线    ' + Math.round(progress) + '%';
+                        } else if (progress < 75) {
+                            status.innerHTML = '正在选取关键曲线    ' + Math.round(progress) + '%';
+                        } else if (progress < 100) {
+                            status.innerHTML = '正在进行OOD检测    ' + Math.round(progress) + '%';
+                        } else {
+                            status.innerHTML = '预测完成';
+                            setTimeout(function () {
+                                // 在加载完成后跳转到另一个页面
+                                window.location.href = "/jump/load_forecasting";
+                            }, 1000); // 假设加载完成后停留1秒
+                            clearInterval(interval);    
+                        }
+
+                        progress += Math.random() * 10;
+                        if (progress >= 100) {
+                            progress = 100;
+                        }
+                        progressBar.style.width = progress + '%';
+                    }, 1000); // 假设每500毫秒更新一次加载进度
+                }
+            </script>
+
+        </div>
+    </div>
+
+</main>
+<script>
+    function change(dir) {
+        // dir  left || right
+        var mat = document.getElementById(dir + "Info");
+        mat.innerHTML = ''
+        var info = document.createElement('span');
+        info.innerHTML = '上传成功'
+        info.class = 'sucessTip';
+        mat.appendChild(info);
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,514 @@
+ {% extends "base.html" %}
+
+{% block main %}
+
+<style>
+  .remarks-cell {
+    position: relative; /* 设置相对定位，便于提示框定位 */
+  }
+
+  .remarks-cell:hover .tooltip-text {
+    visibility: visible; /* 鼠标悬停时显示提示信息 */
+    width: 250px; /* 固定宽度，根据需要调整 */
+  }
+
+  .tooltip-text {
+    visibility: hidden; /* 默认不显示 */
+    width: 150px; /* 固定宽度，根据需要调整 */
+    background-color: white;
+    color: black;
+    text-align: left;
+    border-radius: 6px;
+    padding: 5px;
+    border: 1px solid black; /* 添加黑色边框 */
+
+    /* 定位设置 */
+    position: absolute;
+    z-index: 1;
+    top: 0; /* 保持在顶部与父元素的顶部对齐 */
+    left: 30%; /* 定位到父元素的右侧 */
+    transform: translateY(-100%); /* Y轴向上偏移100% */
+    white-space: normal; /* 允许文本换行 */
+  }
+  
+.search-bar .form-control {
+    width: 200px;
+}
+</style>
+    
+
+  <!--页面主要内容-->
+    <main class="lyear-layout-content">
+
+      <div class="container-fluid">
+
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-toolbar clearfix">
+{#                <form class="pull-right search-bar" method="get" action="#!" role="form">#}
+{#                  <div class="input-group">#}
+{#                    <div class="input-group-btn">#}
+{#                      <input type="hidden" name="search_field" id="search-field" value="title">#}
+{#                      <button class="btn btn-default dropdown-toggle" id="search-btn" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">#}
+{#                      标题 <span class="caret"></span>#}
+{#                      </button>#}
+{#                      <ul class="dropdown-menu">#}
+{#                          这里是搜索栏表单#}
+{#                        <li> <a tabindex="-1" href="javascript:void(0)" data-field="title">标题</a> </li>#}
+{#                        <li> <a tabindex="-1" href="javascript:void(0)" data-field="cat_name">栏目</a> </li>#}
+{#                      </ul>#}
+{#                    </div>#}
+{#                    <input type="text" class="form-control" value="" name="keyword" placeholder="请输入名称">#}
+{#                  </div>#}
+{#                </form>#}
+                  
+              <form class="pull-right search-bar" method="get" action="#!" role="form">
+                  <div class="input-group">
+                    <!-- Hidden input to hold the search field, set to 'remarks' -->
+                    <input type="hidden" name="search_field" id="search-field" value="remarks">
+                    
+{#                    <!-- Dropdown button for Remarks, directly displaying without dropdown since it's the only option -->#}
+{#                    <button class="btn btn-default" type="button" disabled>#}
+{#                      备注#}
+{#                    </button>#}
+                    
+                    <!-- Text input for search keyword -->
+                    <input type="text" class="form-control long-text-input" name="keyword" placeholder="请输入想要检索的关键内容" >
+                  </div>
+              </form >    
+                {#                <div class="toolbar-btn-action">#}
+{#                    这里是操作按钮表单#}
+{#                <a class="btn btn-primary m-r-5 toggle-edit" href="#!" onclick="toggleEdit('{{ record['编号'] }}')"><i class="mdi mdi-plus"></i> 编辑</a>#}
+{##}
+{#                  <a class="btn btn-success m-r-5" href="#!"><i class="mdi mdi-check"></i> 启用</a>#}
+{#                  <a class="btn btn-warning m-r-5" href="#!"><i class="mdi mdi-block-helper"></i> 禁用</a>#}
+{#                    #}
+{#                  <a class="btn btn-danger" href="#!" onclick="deleteSelectedRows();"><i class="mdi mdi-window-close"></i> 删除</a>#}
+{##}
+{#                </div>#}
+              </div>
+              <div class="card-body">
+
+                <div class="table-responsive">
+                  <table class="table table-bordered">
+                  
+                  <thead>
+                        <tr>
+                            <th data-field="编号">编号</th>
+                            <th data-field="日期">日期</th>
+                            <th data-field="分析类型">
+                                分析类型
+                                <select class="form-control" onchange="filterTable('分析类型', this.value);">
+                                    <option value="">所有</option>
+                                    <option value="预测未来曲线">预测未来曲线</option>
+                                    <option value="失稳判别">失稳判别</option>
+                                </select>
+                            </th>
+                            <th data-field="分析结果">
+                                分析结果
+                                <select class="form-control" onchange="filterTable('分析结果', this.value);">
+                                    <option value="">所有</option>
+                                    <option value="空">空</option>
+                                    <option value="稳定">稳定</option>
+                                    <option value="不稳定">不稳定</option>
+                                </select>
+                            </th>
+                            <th data-field="ood类型">
+                                ood类型
+                                <select class="form-control" onchange="filterTable('ood类型', this.value);">
+                                    <option value="">所有</option>
+                                    <option value="是">是</option>
+                                    <option value="否">否</option>
+                                </select>
+                            </th>
+                            <th data-field="备注">备注</th>
+                            <th>操作</th>
+                        </tr>
+                  </thead>
+
+
+                      <tbody>
+                        {% for record in records %}
+                        <tr id="row-{{ record['编号'] }}">
+{#                            <td>#}
+{#                                <label class="lyear-checkbox checkbox-primary">#}
+{#                                    <input type="checkbox" name="ids[]" value="{{ record['编号'] }}"><span></span>#}
+{#                                </label>#}
+{#                            </td>#}
+                            <td>{{ record['编号'] }}</td>
+{#                            contenteditable="true" #}
+                            <td data-field="date" >{{ record['日期'] }}</td>
+                            <td data-field="analysisType" >{{ record['分析类型'] }}</td>
+                            <td data-field="analysisResult" >{{ record['分析结果'] }}</td>
+                            <td data-field="oodType" >{{ record['ood类型'] }}</td>
+{#                            <td class="remarks-tooltip">{{ record['备注'] }}<span class="tooltiptext">{{ record['备注'] }}</span></td>#}
+{#                            <td data-field="remarks" title="{{ record['备注'] }}" contenteditable="true">{{ record['备注'] }}</td>#}
+{#                            <td class="remarks-tooltip">#}
+{#                                  {{ record['备注'] }}#}
+{#                                  <span class="tooltiptext">{{ record['备注'] }}</span>#}
+{#                                </td>#}
+                            
+                            
+{#                            <td class="remarks-cell" title="{{ record['备注'] }}">{{ record['备注'] | truncate(20, true) }}</td>#}
+                            <td class="remarks-cell" data-field="remarks">
+                                <span class="full-remark" style="display: none;">{{ record['备注'] }}</span>
+{#                                {{ record['备注'] | truncate(20, true) }}#}
+                                <div class="display-remark">{{ record['备注'] | truncate(20, true) }}</div>
+                                <span class="tooltip-text">{{ record['备注'] }}</span>
+                            </td>
+
+                            <td>
+                                <div class="btn-group">
+{#                                     <!-- 编辑按钮 -->#}
+{#                                    <a class="btn btn-xs btn-default" href="#!" onclick="toggleEdit('{{ record['编号'] }}')" title="编辑" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>#}
+{#                                    <!-- 提交修改按钮 -->#}
+{#                                    <a class="btn btn-xs btn-default" href="#!" onclick="submitRowChanges('{{ record['编号'] }}');" title="提交修改" data-toggle="tooltip" style="display: none;"><i class="mdi mdi-content-save"></i></a>#}
+                                    
+                                    
+                                    
+                                    <!-- 编辑按钮 -->
+                                    <a class="btn btn-xs btn-default edit-btn" href="#!" title="编辑" data-toggle="tooltip" onclick="toggleEdit('{{ record['编号'] }}')" data-toggle="tooltip">
+                                        <i class="mdi mdi-pencil"></i>
+                                    </a>
+                                    <!-- 提交修改按钮 -->
+                                    <a class="btn btn-xs btn-default submit-btn" href="#!" title="编辑" data-toggle="tooltip" onclick="submitRowChanges('{{ record['编号'] }}');" data-toggle="tooltip" style="display: none;">
+                                        <i class="mdi mdi-content-save"></i>
+                                    </a>
+
+{#                                    <a class="btn btn-xs btn-default" href="#!" title="查看" data-toggle="tooltip"><i class="mdi mdi-eye"></i></a>#}
+                                    <a class="btn btn-xs btn-default delete-btn" href="#!" title="删除" data-toggle="tooltip" data-id="{{ record['编号'] }}" onclick="deleteRow(this);">
+                                        <i class="mdi mdi-window-close"></i>    
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                  
+
+                  </table>
+                </div>
+{#                <ul class="pagination">#}
+{#                    这里是分页控件#}
+{#                  <li class="disabled"><span>«</span></li>#}
+{#                  <li class="active"><span>1</span></li>#}
+{#                  <li><a href="#1">2</a></li>#}
+{#                  <li><a href="#1">3</a></li>#}
+{#                  <li><a href="#1">4</a></li>#}
+{#                  <li><a href="#1">5</a></li>#}
+{#                  <li><a href="#1">6</a></li>#}
+{#                  <li><a href="#1">7</a></li>#}
+{#                  <li><a href="#1">8</a></li>#}
+{#                  <li class="disabled"><span>...</span></li>#}
+{#                  <li><a href="#!">14452</a></li>#}
+{#                  <li><a href="#!">14453</a></li>#}
+{#                  <li><a href="#!">»</a></li>#}
+{#                </ul>#}
+                  <ul class="pagination">
+                    {% if current_page > 1 %}
+                    <li><a href="/events?page={{ current_page - 1 }}">«</a></li>
+                    {% else %}
+                    <li class="disabled"><span>«</span></li>
+                    {% endif %}
+                
+                    {% for p in range(1, total_pages + 1) %}
+                        {% if p == current_page %}
+                            <li class="active"><span>{{ p }}</span></li>
+                        {% else %}
+                            <li><a href="/events?page={{ p }}">{{ p }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if current_page < total_pages %}
+                    <li><a href="/events?page={{ current_page + 1 }}">»</a></li>
+                    {% else %}
+                    <li class="disabled"><span>»</span></li>
+                    {% endif %}
+                </ul>
+
+
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+    
+    
+<script>
+ // 存储所有筛选条件的全局对象
+var filters = {};
+
+function filterTable(columnName, filterValue) {
+    var headers = document.querySelectorAll("table thead th[data-field]");
+    var columnIndex = -1;
+
+    // 查找对应列的索引
+    headers.forEach((header, index) => {
+        if (header.dataset.field === columnName) {
+            columnIndex = index;
+        }
+    });
+
+    if (columnIndex === -1) {
+        console.error('Column not found');
+        return;
+    }
+
+    // 更新筛选条件
+    filters[columnName] = filterValue.replace(/\s+/g, '').trim();
+
+    var table = document.querySelector("table");
+    var tbody = table.getElementsByTagName("tbody")[0];
+    var rows = tbody.getElementsByTagName("tr");
+
+    // 执行筛选操作
+    for (var i = 0; i < rows.length; i++) {
+        var showRow = true; // 默认显示行
+
+        for (var colName in filters) {
+            var header = Array.from(headers).find(header => header.dataset.field === colName);
+            var filterIndex = Array.from(headers).indexOf(header);
+            var cell = rows[i].getElementsByTagName("td")[filterIndex];
+            var text = cell ? cell.textContent.replace(/\s+/g, '').trim() : '';
+
+            if (filters[colName] !== "" && text !== filters[colName]) {
+                showRow = false;
+                break;
+            }
+        }
+
+        rows[i].style.display = showRow ? "" : "none";
+    }
+}
+
+</script>
+    
+{#<script>#}
+{#function deleteSelectedRows() {#}
+{#    var table = document.querySelector("table");#}
+{#    var tbody = table.getElementsByTagName("tbody")[0];#}
+{#    var rows = tbody.getElementsByTagName("tr");#}
+{#    var idsToDelete = [];#}
+{##}
+{#    for (var i = rows.length - 1; i >= 0; i--) {#}
+{#        var row = rows[i];#}
+{#        var checkbox = row.getElementsByTagName("input")[0];#}
+{#        if (checkbox.checked) {#}
+{#            idsToDelete.push(checkbox.value);#}
+{#            tbody.removeChild(row); // 提前从视图中删除行#}
+{#        }#}
+{#    }#}
+{##}
+{#    // 发送AJAX请求到服务器进行实际的删除操作#}
+{#    fetch('/events/delete', {#}
+{#        method: 'POST',#}
+{#        headers: {#}
+{#            'Content-Type': 'application/json',#}
+{#        },#}
+{#        body: JSON.stringify({ids: idsToDelete})#}
+{#    })#}
+{#    .then(response => response.json())#}
+{#    .then(data => {#}
+{#        alert('Deleted Successfully');#}
+{#    })#}
+{#    .catch((error) => {#}
+{#        console.error('Error:', error);#}
+{#    });#}
+{# }#}
+{#</script>#}
+    
+<script>
+function deleteRow(button) {
+    var rowId = button.getAttribute('data-id');
+    var rowToDelete = document.querySelector('tr#row-' + rowId);
+
+    if (confirm('您确定要删除这条记录吗？')) {
+        // 发送AJAX请求到后端删除数据
+        fetch('/events/delete-record', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'id=' + rowId
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => Promise.reject(err));  // 如果响应不是200，提取错误信息并抛出
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                rowToDelete.remove();  // 删除DOM元素
+            } else {
+                alert('删除失败: ' + data.message);  // 使用后端提供的错误信息
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error.message || error);
+            alert('删除失败: ' + (error.message || "未知错误"));
+        });
+    }
+}
+</script>
+
+
+    
+<script>
+{#function toggleEdit(id) {#}
+{#    var row = document.getElementById('row-' + id);#}
+{#    if (!row) {#}
+{#        console.error("Row with ID 'row-" + id + "' not found.");#}
+{#        return;#}
+{#    }#}
+{##}
+{#    var editButton = row.querySelector('.edit-btn');#}
+{#    var submitButton = row.querySelector('.submit-btn');#}
+{##}
+{#    if (!editButton || !submitButton) {#}
+{#        console.error("Edit or Submit button not found.");#}
+{#        return;#}
+{#    }#}
+{##}
+{#    var isEditing = row.getAttribute('data-editing') === 'true';#}
+{#    if (!isEditing) {#}
+{#        row.querySelectorAll('td[data-field]').forEach(cell => {#}
+{#            cell.setAttribute('contenteditable', 'true');#}
+{#        });#}
+{#        row.setAttribute('data-editing', 'true');#}
+{#        submitButton.style.display = 'inline'; // 显示提交按钮#}
+{#        editButton.style.display = 'none'; // 隐藏编辑按钮#}
+{#    } else {#}
+{#        row.querySelectorAll('td[data-field]').forEach(cell => {#}
+{#            cell.removeAttribute('contenteditable');#}
+{#        });#}
+{#        row.removeAttribute('data-editing');#}
+{#        submitButton.style.display = 'none'; // 隐藏提交按钮#}
+{#        editButton.style.display = 'inline'; // 显示编辑按钮#}
+{#    }#}
+{# }#}
+
+function submitRowChanges(id) {
+    var row = document.getElementById('row-' + id);
+    var cells = row.querySelectorAll('td[contenteditable="true"]');
+    var data = {
+        id: id
+    };
+
+    cells.forEach(cell => {
+    var key = cell.getAttribute('data-field'); // 确保这里获得的是原始字段名，如 '日期'
+    data[key] = cell.innerText.trim();
+    }); 
+    // 现在发送这个数据对象到您的服务器
+    
+    console.log("Data to be sent:", data);  
+    fetch('/events/update', { // 注意这里的URL是否与后端接收的URL匹配
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok, status: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(result => {
+            console.log('Success:', result);
+            alert('数据更新成功');
+            location.reload();
+            
+            // Reset the row to non-editable state
+        toggleEdit(id);
+        // 
+
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to Update Record: ' + error.message);
+        });
+}
+
+{#function truncate(string, length=20, ellipsis=true) {#}
+{#    if (string.length > length) {#}
+{#        return string.substring(0, length) + (ellipsis ? '...' : '');#}
+{#    }#}
+{#    return string;#}
+{# }#}
+function toggleEdit(id) {
+    var row = document.getElementById('row-' + id);
+    if (!row) {
+        console.error("Row with ID 'row-" + id + "' not found.");
+        return;
+    }
+
+    var editButton = row.querySelector('.edit-btn');
+    var submitButton = row.querySelector('.submit-btn');
+    var remarkCell = row.querySelector('.remarks-cell[data-field="remarks"]');
+    var fullRemark = remarkCell.querySelector('.full-remark').textContent;  // 获取完整备注内容
+    var displayRemark = remarkCell.querySelector('.display-remark');
+
+    var isEditing = row.getAttribute('data-editing') === 'true';
+    if (!isEditing) {
+        // 开始编辑模式
+        row.querySelectorAll('td[data-field]').forEach(cell => {
+            cell.setAttribute('contenteditable', 'true');
+        });
+        // 设置备注单元格的内容为完整备注
+        displayRemark.textContent = fullRemark;
+        row.setAttribute('data-editing', 'true');
+        submitButton.style.display = 'inline'; // 显示提交按钮
+        editButton.style.display = 'none'; // 隐藏编辑按钮
+    } else {
+        // 结束编辑模式
+        row.querySelectorAll('td[data-field]').forEach(cell => {
+            cell.removeAttribute('contenteditable');
+        });
+        // 将备注重新截断显示
+        displayRemark.textContent = truncate(fullRemark, 20, true);
+        row.removeAttribute('data-editing');
+        submitButton.style.display = 'none'; // 隐藏提交按钮
+        editButton.style.display = 'inline'; // 显示编辑按钮
+    }
+}
+
+function truncate(string, length=20, ellipsis=true) {
+    if (string.length > length) {
+        return string.substring(0, length) + (ellipsis ? '...' : '');
+    }
+    return string;
+}
+
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var searchInput = document.querySelector('input[name="keyword"]');
+    
+    searchInput.addEventListener('input', function() {
+        var searchTerm = this.value.trim().replace(/\s+/g, '.*').toLowerCase();
+        var regex = new RegExp(searchTerm, 'i'); // 'i' 使匹配不区分大小写
+
+        var tableRows = document.querySelectorAll('tbody tr');
+        tableRows.forEach(function(row) {
+            var remarkText = row.querySelector('.remarks-cell .display-remark').textContent;
+            if (regex.test(remarkText) || searchTerm === '') {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+});
+
+</script>
+    
+ {% endblock %}
